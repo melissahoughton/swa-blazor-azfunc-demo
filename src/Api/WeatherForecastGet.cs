@@ -40,6 +40,10 @@ public static class WeatherForecastGet
         {
             summary = "Hot";
         }
+        else if (temp < 32 && temp >= 22)
+        {
+            summary = "Warm";
+        }
         else if (temp <= 16 && temp > 0)
         {
             summary = "Cold";
