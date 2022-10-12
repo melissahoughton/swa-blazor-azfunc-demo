@@ -1,1 +1,1 @@
-# ndcsyd22-swa-demo-complete
+# Template for a Blazor WASM + Azure Function project to use with Azure Static Web Apps
