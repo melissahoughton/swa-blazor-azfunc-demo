@@ -1,9 +1,9 @@
 {
   "profiles": {
     "Api": {
-        "commandName": "Project",
-        "commandLineArgs": "start --cors *",
-        "launchBrowser": false
+      "commandName": "Project",
+      "commandLineArgs": "start --cors *",
+      "launchBrowser": false
     }
   }
 }

@@ -1,24 +1,27 @@
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Linq;
-using System;
+using System.Net;
 using Data;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Api;
 
-public static class WeatherForecastGet
+public class WeatherForecastGet
 {
-    [FunctionName("WeatherForecastGet")]
-    public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
-            ILogger log)
+    private readonly ILogger _logger;
+
+    public WeatherForecastGet(ILoggerFactory loggerFactory)
     {
+        _logger = loggerFactory.CreateLogger<WeatherForecastGet>();
+    }
+
+    [Function("WeatherForecastGet")]
+    public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequestData req)
+    {
+        _logger.LogInformation("C# HTTP trigger function processed a request.");
+
+        var response = req.CreateResponse(HttpStatusCode.OK);
+
         var randomNumber = new Random();
         var temp = 0;
 
@@ -29,7 +32,9 @@ public static class WeatherForecastGet
             Summary = GetSummary(temp)
         }).ToArray();
 
-        return new OkObjectResult(result);
+        await response.WriteAsJsonAsync(result);
+
+        return response;
     }
 
     private static string GetSummary(int temp)
